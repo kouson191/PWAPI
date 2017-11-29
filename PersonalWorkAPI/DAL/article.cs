@@ -6,6 +6,7 @@ using MySql.Data.MySqlClient;
 //using Maticsoft.DBUtility;//Please add references
 using PersonalWorkAPI.Common;
 using PersonalWorkAPI.Model;
+using System.Collections.Generic;
 
 namespace PersonalWorkAPI.DAL
 {
@@ -360,6 +361,39 @@ namespace PersonalWorkAPI.DAL
 			parameters[6].Value = strWhere;	
 			return DbHelperMySQL.RunProcedure("UP_GetRecordByPage",parameters,"ds");
 		}*/
+
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public List<PersonalWorkAPI.Model.article> GetModelList(string strWhere)
+        {
+            DataSet ds = GetList(strWhere);
+            return DataTableToList(ds.Tables[0]);
+        }
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public List<PersonalWorkAPI.Model.article> DataTableToList(DataTable dt)
+        {
+            List<PersonalWorkAPI.Model.article> modelList = new List<PersonalWorkAPI.Model.article>();
+            int rowsCount = dt.Rows.Count;
+            if (rowsCount > 0)
+            {
+                PersonalWorkAPI.Model.article model;
+                for (int n = 0; n < rowsCount; n++)
+                {
+                    model = DataRowToModel(dt.Rows[n]);
+                    if (model != null)
+                    {
+                        modelList.Add(model);
+                    }
+                }
+            }
+            return modelList;
+        }
+
+
+
 
 		#endregion  BasicMethod
 		#region  ExtensionMethod

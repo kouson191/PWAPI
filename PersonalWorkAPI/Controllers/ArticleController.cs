@@ -152,5 +152,39 @@ namespace PersonalWorkAPI.Controllers
         }
 
 
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        //public List<PersonalWorkAPI.Model.article> GetModelList(string strWhere)
+        //{
+        //    DataSet ds = dal.GetList(strWhere);
+        //    return DataTableToList(ds.Tables[0]);
+        //}
+
+        [HttpGet]
+        public HttpResponseMessage GetList(string strWhere)
+        {
+            strWhere = ( strWhere==null) ? "" : strWhere;
+            ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>> returnObj = new ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>>() { ReturnObject = new List<PersonalWorkAPI.Model.article>() };
+            try 
+            {
+                returnObj.ReturnObject = dal.GetModelList(strWhere);
+
+                returnObj.IsError = false; 
+            }
+            catch (Exception ex)
+            {
+                returnObj.IsError = true;
+                returnObj.Error.ErrorMsg = ex.Message.ToString();
+                returnObj.Error.ErrorCode = Error.EnumErrorCode.未知错误;
+            }
+
+            string str = Jil.JSON.Serialize < ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>>>(returnObj);
+            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
+            return result;
+        }
+
+
+
     }
 }
