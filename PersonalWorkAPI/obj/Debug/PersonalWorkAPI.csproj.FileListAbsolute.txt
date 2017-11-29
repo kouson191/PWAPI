@@ -84,3 +84,11 @@ E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\obj\Debug\PersonalWorkAPI.pdb
 E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\bin\System.Web.Cors.dll
 E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\bin\System.Web.Http.Cors.dll
 E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\bin\System.Web.Http.Cors.xml
+E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\bin\MySql.Data.dll
+E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\bin\System.Data.SQLite.DLL
+E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\obj\Debug\PersonalWorkAPI.csprojResolveAssemblyReference.cache
+E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\bin\Jil.dll
+E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\bin\Sigil.dll
+E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\bin\Jil.pdb
+E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\bin\Jil.xml
+E:\WebProject\PersonalWorkAPI\PersonalWorkAPI\bin\Sigil.xml
