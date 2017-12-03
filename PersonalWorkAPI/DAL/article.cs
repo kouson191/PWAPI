@@ -232,7 +232,7 @@ namespace PersonalWorkAPI.DAL
                 }
                 if (row["article_created"] != null && row["article_created"].ToString() != "")
                 {
-                    model.article_created = int.Parse(row["article_created"].ToString());
+                    model.article_created = row["article_created"].ToString();
                 }
                 if (row["article_creator"] != null)
                 {
@@ -240,7 +240,7 @@ namespace PersonalWorkAPI.DAL
                 }
                 if (row["article_changed"] != null && row["article_changed"].ToString() != "")
                 {
-                    model.article_changed = int.Parse(row["article_changed"].ToString());
+                    model.article_changed = row["article_changed"].ToString();
                 }
                 if (row["article_changer"] != null)
                 {
@@ -270,6 +270,12 @@ namespace PersonalWorkAPI.DAL
                 {
                     model.article_status = int.Parse(row["article_status"].ToString());
                 }
+
+                if (row["sort_name"] != null)
+                {
+                    model.sort_name = row["sort_name"].ToString();
+                }
+
             }
             return model;
         }
@@ -280,12 +286,14 @@ namespace PersonalWorkAPI.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select article_id,article_title,article_created,article_creator,article_changed,article_changer,article_click,sort_id,article_content,article_up,article_support,article_status ");
-            strSql.Append(" FROM article ");
+            strSql.Append("select article_id,article_title,from_unixtime(article_created) article_created,article_creator,from_unixtime(article_changed) article_changed,article_changer,article_click,article.sort_id,article_content,article_up,article_support,article_status,article_sort.sort_name ");
+            strSql.Append(" FROM article  inner join article_sort on article.sort_id = article_sort.sort_id ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
             }
+            strSql.Append(" order by  article_created desc ");
+
             return DbHelperMySQL.Query(strSql.ToString());
         }
 
@@ -364,10 +372,12 @@ namespace PersonalWorkAPI.DAL
         /// <summary>
         /// 获得数据列表
         /// </summary>
-        public List<PersonalWorkAPI.Model.article> GetModelList(string strWhere)
+        public List<PersonalWorkAPI.Model.article> GetModelList(string strWhere, int pageSize, int pageIndex, ref int totalPage)
         {
             DataSet ds = GetList(strWhere);
-            return DataTableToList(ds.Tables[0]);
+
+            DataTable rslt = Pagination.getOnePageTable(ds.Tables[0], pageIndex, pageSize, ref totalPage);
+            return DataTableToList(rslt);
         }
         /// <summary>
         /// 获得数据列表

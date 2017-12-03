@@ -197,6 +197,7 @@
     <Compile Include="Common\DbHelperMySQL.cs" />
     <Compile Include="Common\DESEncrypt.cs" />
     <Compile Include="Common\Error.cs" />
+    <Compile Include="Common\Pagination.cs" />
     <Compile Include="Common\PubConstant.cs" />
     <Compile Include="Common\ReturnBaseObject.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
@@ -287,6 +288,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <None Include="Properties\PublishProfiles\PWAPI.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />

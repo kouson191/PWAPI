@@ -32,5 +32,7 @@ namespace PersonalWorkAPI.Common
         /// </summary>
         public object ExtendObject { get; set; }
 
+        //总页数
+        public int PageCount { get; set; }
     }
 }

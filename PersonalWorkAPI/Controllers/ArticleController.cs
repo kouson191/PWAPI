@@ -161,15 +161,23 @@ namespace PersonalWorkAPI.Controllers
         //    return DataTableToList(ds.Tables[0]);
         //}
 
+        /// <summary>
+        /// 查询列表
+        /// </summary>
+        /// <param name="strWhere">查询条件%需要写成%25</param>
+        /// <param name="pageSize">每页行数</param>
+        /// <param name="pageIndex">第几页</param>
+        /// <returns></returns>
         [HttpGet]
-        public HttpResponseMessage GetList(string strWhere)
+        public HttpResponseMessage GetList(string strWhere, int pageSize, int pageIndex)
         {
             strWhere = ( strWhere==null) ? "" : strWhere;
             ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>> returnObj = new ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>>() { ReturnObject = new List<PersonalWorkAPI.Model.article>() };
             try 
             {
-                returnObj.ReturnObject = dal.GetModelList(strWhere);
-
+                int pageCount = 0; 
+                returnObj.ReturnObject = dal.GetModelList(strWhere, pageSize, pageIndex, ref pageCount);
+                returnObj.PageCount = pageCount;
                 returnObj.IsError = false; 
             }
             catch (Exception ex)

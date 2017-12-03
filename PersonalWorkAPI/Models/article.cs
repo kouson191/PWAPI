@@ -13,9 +13,9 @@ namespace PersonalWorkAPI.Model
 		#region Model
 		private int _article_id;
 		private string _article_title;
-		private int? _article_created=0;
+		private string _article_created;
 		private string _article_creator;
-		private int? _article_changed=0;
+		private string _article_changed;
 		private string _article_changer;
 		private int? _article_click=0;
 		private int? _sort_id=0;
@@ -23,6 +23,14 @@ namespace PersonalWorkAPI.Model
 		private int? _article_up=0;
 		private int? _article_support=0;
 		private int? _article_status=0;
+        private string _sort_name;
+
+        public string sort_name
+        {
+            set { _sort_name = value; }
+            get { return _sort_name; }
+        }
+        
 		/// <summary>
 		/// auto_increment
 		/// </summary>
@@ -42,7 +50,7 @@ namespace PersonalWorkAPI.Model
 		/// <summary>
 		/// 
 		/// </summary>
-		public int? article_created
+		public string article_created
 		{
 			set{ _article_created=value;}
 			get{return _article_created;}
@@ -58,7 +66,7 @@ namespace PersonalWorkAPI.Model
 		/// <summary>
 		/// 
 		/// </summary>
-		public int? article_changed
+		public string article_changed
 		{
 			set{ _article_changed=value;}
 			get{return _article_changed;}
