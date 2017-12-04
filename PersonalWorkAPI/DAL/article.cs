@@ -43,39 +43,28 @@ namespace PersonalWorkAPI.DAL
         }
 
 
-        /// <summary>
-        /// 增加一条数据
-        /// </summary>
-        public bool Add(PersonalWorkAPI.Model.article model)
+        public bool Add(dynamic model)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into article(");
-            strSql.Append("article_title,article_created,article_creator,article_changed,article_changer,article_click,sort_id,article_content,article_up,article_support,article_status)");
+            strSql.Append("article_title,article_created,article_creator,sort_id,article_content,article_up,article_support,article_status)");
             strSql.Append(" values (");
-            strSql.Append("@article_title,@article_created,@article_creator,@article_changed,@article_changer,@article_click,@sort_id,@article_content,@article_up,@article_support,@article_status)");
+            strSql.Append("@article_title,unix_timestamp(now()),@article_creator,@sort_id,@article_content,@article_up,@article_support,@article_status)");
             MySqlParameter[] parameters = {
-					new MySqlParameter("@article_title", MySqlDbType.VarChar,128),
-					new MySqlParameter("@article_created", MySqlDbType.Int32,11),
-					new MySqlParameter("@article_creator", MySqlDbType.VarChar,32),
-					new MySqlParameter("@article_changed", MySqlDbType.Int32,11),
-					new MySqlParameter("@article_changer", MySqlDbType.VarChar,32),
-					new MySqlParameter("@article_click", MySqlDbType.Int32,11),
+					new MySqlParameter("@article_title", MySqlDbType.VarChar,128), 
+					new MySqlParameter("@article_creator", MySqlDbType.VarChar,32), 
 					new MySqlParameter("@sort_id", MySqlDbType.Int32,11),
 					new MySqlParameter("@article_content", MySqlDbType.Text),
 					new MySqlParameter("@article_up", MySqlDbType.Int16,3),
 					new MySqlParameter("@article_support", MySqlDbType.Int16,3),
 					new MySqlParameter("@article_status", MySqlDbType.Int16,3)};
-            parameters[0].Value = model.article_title;
-            parameters[1].Value = model.article_created;
-            parameters[2].Value = model.article_creator;
-            parameters[3].Value = model.article_changed;
-            parameters[4].Value = model.article_changer;
-            parameters[5].Value = model.article_click;
-            parameters[6].Value = model.sort_id;
-            parameters[7].Value = model.article_content;
-            parameters[8].Value = model.article_up;
-            parameters[9].Value = model.article_support;
-            parameters[10].Value = model.article_status;
+            parameters[0].Value = model.article_title; 
+            parameters[1].Value = model.article_creator; 
+            parameters[2].Value = model.sort_id;
+            parameters[3].Value = model.article_content;
+            parameters[4].Value = model.article_up;
+            parameters[5].Value = model.article_support;
+            parameters[6].Value = model.article_status;
 
             int rows = DbHelperMySQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -85,21 +74,19 @@ namespace PersonalWorkAPI.DAL
             else
             {
                 return false;
-            }
-        }
+            } 
+        } 
+        
         /// <summary>
         /// 更新一条数据
         /// </summary>
-        public bool Update(PersonalWorkAPI.Model.article model)
+        public bool Update(dynamic model)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("update article set ");
             strSql.Append("article_title=@article_title,");
-            strSql.Append("article_created=@article_created,");
-            strSql.Append("article_creator=@article_creator,");
-            strSql.Append("article_changed=@article_changed,");
-            strSql.Append("article_changer=@article_changer,");
-            strSql.Append("article_click=@article_click,");
+            strSql.Append("article_changed=unix_timestamp(now()),");
+            strSql.Append("article_changer=@article_changer,"); 
             strSql.Append("sort_id=@sort_id,");
             strSql.Append("article_content=@article_content,");
             strSql.Append("article_up=@article_up,");
@@ -107,30 +94,22 @@ namespace PersonalWorkAPI.DAL
             strSql.Append("article_status=@article_status");
             strSql.Append(" where article_id=@article_id");
             MySqlParameter[] parameters = {
-					new MySqlParameter("@article_title", MySqlDbType.VarChar,128),
-					new MySqlParameter("@article_created", MySqlDbType.Int32,11),
-					new MySqlParameter("@article_creator", MySqlDbType.VarChar,32),
-					new MySqlParameter("@article_changed", MySqlDbType.Int32,11),
-					new MySqlParameter("@article_changer", MySqlDbType.VarChar,32),
-					new MySqlParameter("@article_click", MySqlDbType.Int32,11),
+					new MySqlParameter("@article_title", MySqlDbType.VarChar,128),  
+					new MySqlParameter("@article_changer", MySqlDbType.VarChar,32), 
 					new MySqlParameter("@sort_id", MySqlDbType.Int32,11),
 					new MySqlParameter("@article_content", MySqlDbType.Text),
 					new MySqlParameter("@article_up", MySqlDbType.Int16,3),
 					new MySqlParameter("@article_support", MySqlDbType.Int16,3),
 					new MySqlParameter("@article_status", MySqlDbType.Int16,3),
 					new MySqlParameter("@article_id", MySqlDbType.Int32,11)};
-            parameters[0].Value = model.article_title;
-            parameters[1].Value = model.article_created;
-            parameters[2].Value = model.article_creator;
-            parameters[3].Value = model.article_changed;
-            parameters[4].Value = model.article_changer;
-            parameters[5].Value = model.article_click;
-            parameters[6].Value = model.sort_id;
-            parameters[7].Value = model.article_content;
-            parameters[8].Value = model.article_up;
-            parameters[9].Value = model.article_support;
-            parameters[10].Value = model.article_status;
-            parameters[11].Value = model.article_id;
+            parameters[0].Value = model.article_title;  
+            parameters[1].Value = model.article_changer; 
+            parameters[2].Value = model.sort_id;
+            parameters[3].Value = model.article_content;
+            parameters[4].Value = model.article_up;
+            parameters[5].Value = model.article_support;
+            parameters[6].Value = model.article_status;
+            parameters[7].Value = model.article_id;
 
             int rows = DbHelperMySQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -186,13 +165,8 @@ namespace PersonalWorkAPI.DAL
             }
         }
 
-
-        /// <summary>
-        /// 得到一个对象实体
-        /// </summary>
-        public PersonalWorkAPI.Model.article GetModel(int article_id)
+        public DataTable GetModel(int article_id)
         {
-
             StringBuilder strSql = new StringBuilder();
             strSql.Append("select article_id,article_title,article_created,article_creator,article_changed,article_changer,article_click,sort_id,article_content,article_up,article_support,article_status from article ");
             strSql.Append(" where article_id=@article_id");
@@ -205,13 +179,41 @@ namespace PersonalWorkAPI.DAL
             DataSet ds = DbHelperMySQL.Query(strSql.ToString(), parameters);
             if (ds.Tables[0].Rows.Count > 0)
             {
-                return DataRowToModel(ds.Tables[0].Rows[0]);
+                return ds.Tables[0];
             }
             else
             {
                 return null;
             }
         }
+
+
+
+        /// <summary>
+        /// 得到一个对象实体
+        /// </summary>
+        //public PersonalWorkAPI.Model.article GetModel(int article_id)
+        //{
+
+        //    StringBuilder strSql = new StringBuilder();
+        //    strSql.Append("select article_id,article_title,article_created,article_creator,article_changed,article_changer,article_click,sort_id,article_content,article_up,article_support,article_status from article ");
+        //    strSql.Append(" where article_id=@article_id");
+        //    MySqlParameter[] parameters = {
+        //            new MySqlParameter("@article_id", MySqlDbType.Int32)
+        //    };
+        //    parameters[0].Value = article_id;
+
+        //    PersonalWorkAPI.Model.article model = new PersonalWorkAPI.Model.article();
+        //    DataSet ds = DbHelperMySQL.Query(strSql.ToString(), parameters);
+        //    if (ds.Tables[0].Rows.Count > 0)
+        //    {
+        //        return DataRowToModel(ds.Tables[0].Rows[0]);
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
 
 
         /// <summary>

@@ -12,7 +12,8 @@ using System.Globalization;
 using PersonalWorkAPI.DAL;
 using PersonalWorkAPI.Model;
 using PersonalWorkAPI.Common;
-using System.Text; 
+using System.Text;
+using Newtonsoft.Json;
 
 namespace PersonalWorkAPI.Controllers
 {
@@ -20,146 +21,129 @@ namespace PersonalWorkAPI.Controllers
     {
         private readonly PersonalWorkAPI.DAL.article dal = new PersonalWorkAPI.DAL.article();
 
+
         /// <summary>
-        /// 增加一条数据
+        /// 新增一条数据
         /// </summary>
         [HttpPost]
-        public HttpResponseMessage Add(PersonalWorkAPI.Model.article model)
-        { 
-            ReturnBaseObject<Boolean> returnObj = new ReturnBaseObject<Boolean>();
+        public RetResult Add(dynamic model)
+        {
+            var retResult = new RetResult();
+            retResult.SetSuccess("新增文章成功！");
+
             try
             {
-                returnObj.ReturnObject = dal.Add(model);
-
-                returnObj.IsError = false;
-
+                var rslt = dal.Add(model); ;
+                retResult.RetData = rslt;
             }
             catch (Exception ex)
-            { 
-                returnObj.IsError = true;
-                returnObj.Error.ErrorMsg = ex.Message.ToString();
-                returnObj.Error.ErrorCode = Error.EnumErrorCode.未知错误;
+            {
+                retResult.SetFail("新增文章失败！");
+                retResult.Exception = ex.Message;
             }
 
-            string str = Jil.JSON.Serialize<ReturnBaseObject<Boolean>>(returnObj);
-            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
-            return result;
+            return retResult;
         }
 
         /// <summary>
         /// 更新一条数据
         /// </summary>
         [HttpPost]
-        public HttpResponseMessage Update(PersonalWorkAPI.Model.article model)
+        public RetResult Update(dynamic model)
         {
-            ReturnBaseObject<Boolean> returnObj = new ReturnBaseObject<Boolean>();
+            var retResult = new RetResult();
+            retResult.SetSuccess("保存文章成功！");
+
             try
             {
-                returnObj.ReturnObject = dal.Update(model);
-
-                returnObj.IsError = false;
-
+                var rslt = dal.Update(model); ;
+                retResult.RetData = rslt;
             }
             catch (Exception ex)
             {
-                returnObj.IsError = true;
-                returnObj.Error.ErrorMsg = ex.Message.ToString();
-                returnObj.Error.ErrorCode = Error.EnumErrorCode.未知错误;
+                retResult.SetFail("保存文章失败！");
+                retResult.Exception = ex.Message;
             }
 
-            string str = Jil.JSON.Serialize<ReturnBaseObject<Boolean>>(returnObj);
-            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
-            return result;
+            return retResult;
         }
+
 
         /// <summary>
         /// 删除一条数据
         /// </summary>
-        [HttpPost]
-        public HttpResponseMessage Delete(int article_id)
+        [HttpGet]
+        public RetResult Delete(int article_id)
         {
-            ReturnBaseObject<Boolean> returnObj = new ReturnBaseObject<Boolean>();
+            var retResult = new RetResult();
+            retResult.SetSuccess("删除文章详细信息成功！");
+
             try
             {
-                returnObj.ReturnObject = dal.Delete(article_id);
-
-                returnObj.IsError = false;
-
+                var res = dal.Delete(article_id);
+                retResult.RetData = res;
             }
             catch (Exception ex)
             {
-                returnObj.IsError = true;
-                returnObj.Error.ErrorMsg = ex.Message.ToString();
-                returnObj.Error.ErrorCode = Error.EnumErrorCode.未知错误;
+                retResult.SetFail("删除文章详细信息失败！");
+                retResult.Exception = ex.Message;
             }
 
-            string str = Jil.JSON.Serialize<ReturnBaseObject<Boolean>>(returnObj);
-            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
-            return result;
+            return retResult;
         }
+
 
         /// <summary>
         /// 批量删除数据
-        /// </summary> 
-        [HttpPost]
-        public HttpResponseMessage DeleteList(string article_id)
+        /// </summary>
+        [HttpGet]
+        public RetResult DeleteList(string article_id)
         {
-            ReturnBaseObject<Boolean> returnObj = new ReturnBaseObject<Boolean>();
+            var retResult = new RetResult();
+            retResult.SetSuccess("删除文章详细信息成功！");
+
             try
             {
-                returnObj.ReturnObject = dal.DeleteList(article_id);
-
-                returnObj.IsError = false;
-
+                var res = dal.DeleteList(article_id);
+                retResult.RetData = res;
             }
             catch (Exception ex)
             {
-                returnObj.IsError = true;
-                returnObj.Error.ErrorMsg = ex.Message.ToString();
-                returnObj.Error.ErrorCode = Error.EnumErrorCode.未知错误;
+                retResult.SetFail("删除文章详细信息失败！");
+                retResult.Exception = ex.Message;
             }
 
-            string str = Jil.JSON.Serialize<ReturnBaseObject<Boolean>>(returnObj);
-            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
-            return result;
+            return retResult;
         }
-
-
+  
         /// <summary>
-        /// 得到一个对象实体
+        /// 获取明细
         /// </summary> 
         [HttpGet]
-        public HttpResponseMessage GetModel(int article_id)
+        public RetResult GetModel(int article_id)
         {
-            ReturnBaseObject<PersonalWorkAPI.Model.article> returnObj = new ReturnBaseObject<PersonalWorkAPI.Model.article>();
+            var retResult = new RetResult();
+            retResult.SetSuccess("查询文章详细信息成功！");
+
             try
             {
-                returnObj.ReturnObject = dal.GetModel(article_id);
+                var res = dal.GetModel(article_id); ;
 
-                returnObj.IsError = false;
-
+                if (res != null && res.Rows.Count != 0)
+                {
+                    retResult.RetData = res;
+                }
             }
             catch (Exception ex)
             {
-                returnObj.IsError = true;
-                returnObj.Error.ErrorMsg = ex.Message.ToString();
-                returnObj.Error.ErrorCode = Error.EnumErrorCode.未知错误;
+                retResult.SetFail("查询文章详细信息失败！");
+                retResult.Exception = ex.Message;
             }
 
-            string str = Jil.JSON.Serialize<ReturnBaseObject<PersonalWorkAPI.Model.article>>(returnObj);
-            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
-            return result;
+            return retResult;
         }
 
 
-        /// <summary>
-        /// 获得数据列表
-        /// </summary>
-        //public List<PersonalWorkAPI.Model.article> GetModelList(string strWhere)
-        //{
-        //    DataSet ds = dal.GetList(strWhere);
-        //    return DataTableToList(ds.Tables[0]);
-        //}
 
         /// <summary>
         /// 查询列表
@@ -171,14 +155,14 @@ namespace PersonalWorkAPI.Controllers
         [HttpGet]
         public HttpResponseMessage GetList(string strWhere, int pageSize, int pageIndex)
         {
-            strWhere = ( strWhere==null) ? "" : strWhere;
+            strWhere = (strWhere == null) ? "" : strWhere;
             ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>> returnObj = new ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>>() { ReturnObject = new List<PersonalWorkAPI.Model.article>() };
-            try 
+            try
             {
-                int pageCount = 0; 
+                int pageCount = 0;
                 returnObj.ReturnObject = dal.GetModelList(strWhere, pageSize, pageIndex, ref pageCount);
                 returnObj.PageCount = pageCount;
-                returnObj.IsError = false; 
+                returnObj.IsError = false;
             }
             catch (Exception ex)
             {
@@ -187,7 +171,7 @@ namespace PersonalWorkAPI.Controllers
                 returnObj.Error.ErrorCode = Error.EnumErrorCode.未知错误;
             }
 
-            string str = Jil.JSON.Serialize < ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>>>(returnObj);
+            string str = Jil.JSON.Serialize<ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>>>(returnObj);
             HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
             return result;
         }

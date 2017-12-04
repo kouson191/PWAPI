@@ -183,7 +183,6 @@ E:\Project\PWAPI\PersonalWorkAPI\bin\ko\System.Spatial.resources.dll
 E:\Project\PWAPI\PersonalWorkAPI\bin\ru\System.Spatial.resources.dll
 E:\Project\PWAPI\PersonalWorkAPI\bin\zh-Hans\System.Spatial.resources.dll
 E:\Project\PWAPI\PersonalWorkAPI\bin\zh-Hant\System.Spatial.resources.dll
-E:\Project\PWAPI\PersonalWorkAPI\obj\Debug\PersonalWorkAPI.csprojResolveAssemblyReference.cache
 E:\Project\PWAPI\PersonalWorkAPI\obj\Debug\PersonalWorkAPI.dll
 E:\Project\PWAPI\PersonalWorkAPI\obj\Debug\PersonalWorkAPI.pdb
 E:\WebProject\PWAPI\PersonalWorkAPI\bin\PersonalWorkAPI.dll.config
