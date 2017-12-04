@@ -142,7 +142,37 @@ namespace PersonalWorkAPI.Controllers
 
             return retResult;
         }
+         
 
+        /// <summary>
+        /// 列表
+        /// </summary> 
+        [HttpPost]
+        public RetResult GetList(dynamic mode)
+        {
+            //pageSize
+            //pageIndex
+            var retResult = new RetResult();
+            retResult.SetSuccess("查询文章详细信息成功！");
+            var pageCount = 0;
+            try
+            {
+                var res = dal.GetModelList(mode, ref pageCount); 
+
+                if (res != null && res.Rows.Count != 0)
+                {
+                    retResult.RetData = res;
+                     retResult.pageCount = pageCount;
+                }
+            }
+            catch (Exception ex)
+            {
+                retResult.SetFail("查询文章详细信息失败！");
+                retResult.Exception = ex.Message;
+            }
+
+            return retResult; 
+        }
 
 
         /// <summary>
@@ -152,29 +182,29 @@ namespace PersonalWorkAPI.Controllers
         /// <param name="pageSize">每页行数</param>
         /// <param name="pageIndex">第几页</param>
         /// <returns></returns>
-        [HttpGet]
-        public HttpResponseMessage GetList(string strWhere, int pageSize, int pageIndex)
-        {
-            strWhere = (strWhere == null) ? "" : strWhere;
-            ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>> returnObj = new ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>>() { ReturnObject = new List<PersonalWorkAPI.Model.article>() };
-            try
-            {
-                int pageCount = 0;
-                returnObj.ReturnObject = dal.GetModelList(strWhere, pageSize, pageIndex, ref pageCount);
-                returnObj.PageCount = pageCount;
-                returnObj.IsError = false;
-            }
-            catch (Exception ex)
-            {
-                returnObj.IsError = true;
-                returnObj.Error.ErrorMsg = ex.Message.ToString();
-                returnObj.Error.ErrorCode = Error.EnumErrorCode.未知错误;
-            }
+        //[HttpGet]
+        //public HttpResponseMessage GetList(string strWhere, int pageSize, int pageIndex)
+        //{
+        //    strWhere = (strWhere == null) ? "" : strWhere;
+        //    ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>> returnObj = new ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>>() { ReturnObject = new List<PersonalWorkAPI.Model.article>() };
+        //    try
+        //    {
+        //        int pageCount = 0;
+        //        returnObj.ReturnObject = dal.GetModelList(strWhere, pageSize, pageIndex, ref pageCount);
+        //        returnObj.PageCount = pageCount;
+        //        returnObj.IsError = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        returnObj.IsError = true;
+        //        returnObj.Error.ErrorMsg = ex.Message.ToString();
+        //        returnObj.Error.ErrorCode = Error.EnumErrorCode.未知错误;
+        //    }
 
-            string str = Jil.JSON.Serialize<ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>>>(returnObj);
-            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
-            return result;
-        }
+        //    string str = Jil.JSON.Serialize<ReturnBaseObject<IEnumerable<PersonalWorkAPI.Model.article>>>(returnObj);
+        //    HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
+        //    return result;
+        //}
 
 
 

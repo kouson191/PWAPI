@@ -19,6 +19,14 @@ namespace PersonalWorkAPI.Common
         /// 信息
         /// </summary>
         public string Message { get; set; }
+
+
+        /// <summary>
+        /// 总页数
+        /// </summary>
+        public int pageCount { get; set; }
+
+
         /// <summary>
         /// 异常
         /// </summary>

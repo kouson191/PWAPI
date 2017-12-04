@@ -2,7 +2,7 @@
 using System;
 using System.Data;
 using System.Text;
-using MySql.Data.MySqlClient; 
+using MySql.Data.MySqlClient;
 using PersonalWorkAPI.Common;
 using PersonalWorkAPI.Model;
 using System.Collections.Generic;
@@ -58,8 +58,8 @@ namespace PersonalWorkAPI.DAL
 					new MySqlParameter("@article_up", MySqlDbType.Int16,3),
 					new MySqlParameter("@article_support", MySqlDbType.Int16,3),
 					new MySqlParameter("@article_status", MySqlDbType.Int16,3)};
-            parameters[0].Value = model.article_title; 
-            parameters[1].Value = model.article_creator; 
+            parameters[0].Value = model.article_title;
+            parameters[1].Value = model.article_creator;
             parameters[2].Value = model.sort_id;
             parameters[3].Value = model.article_content;
             parameters[4].Value = model.article_up;
@@ -74,9 +74,9 @@ namespace PersonalWorkAPI.DAL
             else
             {
                 return false;
-            } 
-        } 
-        
+            }
+        }
+
         /// <summary>
         /// 更新一条数据
         /// </summary>
@@ -86,7 +86,7 @@ namespace PersonalWorkAPI.DAL
             strSql.Append("update article set ");
             strSql.Append("article_title=@article_title,");
             strSql.Append("article_changed=unix_timestamp(now()),");
-            strSql.Append("article_changer=@article_changer,"); 
+            strSql.Append("article_changer=@article_changer,");
             strSql.Append("sort_id=@sort_id,");
             strSql.Append("article_content=@article_content,");
             strSql.Append("article_up=@article_up,");
@@ -102,8 +102,8 @@ namespace PersonalWorkAPI.DAL
 					new MySqlParameter("@article_support", MySqlDbType.Int16,3),
 					new MySqlParameter("@article_status", MySqlDbType.Int16,3),
 					new MySqlParameter("@article_id", MySqlDbType.Int32,11)};
-            parameters[0].Value = model.article_title;  
-            parameters[1].Value = model.article_changer; 
+            parameters[0].Value = model.article_title;
+            parameters[1].Value = model.article_changer;
             parameters[2].Value = model.sort_id;
             parameters[3].Value = model.article_content;
             parameters[4].Value = model.article_up;
@@ -285,19 +285,56 @@ namespace PersonalWorkAPI.DAL
         /// <summary>
         /// 获得数据列表
         /// </summary>
-        public DataSet GetList(string strWhere)
+        public DataSet GetList(dynamic mode)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("select article_id,article_title,from_unixtime(article_created) article_created,article_creator,from_unixtime(article_changed) article_changed,article_changer,article_click,article.sort_id,article_content,article_up,article_support,article_status,article_sort.sort_name ");
-            strSql.Append(" FROM article  inner join article_sort on article.sort_id = article_sort.sort_id ");
-            if (strWhere.Trim() != "")
+            strSql.Append(" FROM article  inner join article_sort on article.sort_id = article_sort.sort_id where 1 = 1  ");
+
+            if (!string.IsNullOrEmpty(mode.article_title.Value))
             {
-                strSql.Append(" where " + strWhere);
+                strSql.Append(" and  article_title like @article_title ");
             }
+            if (!string.IsNullOrEmpty(mode.sort_id.Value))
+            {
+                strSql.Append("  and  article.sort_id = @sort_id ");
+            }
+
+            if (!string.IsNullOrEmpty(mode.article_status.Value))
+            {
+                strSql.Append("  and  article_status = @article_status  ");
+            }
+
+
+            MySqlParameter[] parameter = {
+               new MySqlParameter("@article_title","%"+mode.article_title.Value+"%"),
+               new MySqlParameter("@sort_id",mode.sort_id.Value),
+               new MySqlParameter("@article_status",mode.article_status.Value)
+             }; 
+
             strSql.Append(" order by  article_created desc ");
 
-            return DbHelperMySQL.Query(strSql.ToString());
+            return DbHelperMySQL.Query(strSql.ToString(), parameter);
         }
+
+
+
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        //public DataSet GetList(string strWhere)
+        //{
+        //    StringBuilder strSql = new StringBuilder();
+        //    strSql.Append("select article_id,article_title,from_unixtime(article_created) article_created,article_creator,from_unixtime(article_changed) article_changed,article_changer,article_click,article.sort_id,article_content,article_up,article_support,article_status,article_sort.sort_name ");
+        //    strSql.Append(" FROM article  inner join article_sort on article.sort_id = article_sort.sort_id ");
+        //    if (strWhere.Trim() != "")
+        //    {
+        //        strSql.Append(" where " + strWhere);
+        //    }
+        //    strSql.Append(" order by  article_created desc ");
+
+        //    return DbHelperMySQL.Query(strSql.ToString());
+        //}
 
         /// <summary>
         /// 获取记录总数
@@ -371,16 +408,37 @@ namespace PersonalWorkAPI.DAL
             return DbHelperMySQL.RunProcedure("UP_GetRecordByPage",parameters,"ds");
         }*/
 
+
+
         /// <summary>
         /// 获得数据列表
         /// </summary>
-        public List<PersonalWorkAPI.Model.article> GetModelList(string strWhere, int pageSize, int pageIndex, ref int totalPage)
+        public DataTable GetModelList(dynamic mode ,ref int totalPage)
         {
-            DataSet ds = GetList(strWhere);
+            DataSet ds = GetList(mode);
 
-            DataTable rslt = Pagination.getOnePageTable(ds.Tables[0], pageIndex, pageSize, ref totalPage);
-            return DataTableToList(rslt);
+            DataTable rslt = Pagination.getOnePageTable(ds.Tables[0], int.Parse(mode.pageIndex.Value), int.Parse(mode.pageSize.Value), ref totalPage);
+            return rslt;
         }
+
+
+
+
+
+        /// <summary>
+        /// 获得数据列表
+        ///// </summary>
+        //public List<PersonalWorkAPI.Model.article> GetModelList(string strWhere, int pageSize, int pageIndex, ref int totalPage)
+        //{
+        //    DataSet ds = GetList(strWhere);
+
+        //    DataTable rslt = Pagination.getOnePageTable(ds.Tables[0], pageIndex, pageSize, ref totalPage);
+        //    return DataTableToList(rslt);
+        //}
+
+
+
+
         /// <summary>
         /// 获得数据列表
         /// </summary>
