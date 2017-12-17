@@ -288,7 +288,7 @@ namespace PersonalWorkAPI.DAL
         public DataSet GetList(dynamic mode)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select article_id,article_title,from_unixtime(article_created) article_created,article_creator,from_unixtime(article_changed) article_changed,article_changer,article_click,article.sort_id,article_content,article_up,article_support,article_status,article_sort.sort_name ");
+            strSql.Append("select article_id,article_title,from_unixtime(article_created, '%Y-%m-%d %H:%i:%S') article_created,article_creator,from_unixtime(article_changed, '%Y-%m-%d %H:%i:%S') article_changed,article_changer,article_click,article.sort_id,article_content,article_up,article_support,article_status,article_sort.sort_name ");
             strSql.Append(" FROM article  inner join article_sort on article.sort_id = article_sort.sort_id where 1 = 1  ");
 
             if (!string.IsNullOrEmpty(mode.article_title.Value))
@@ -310,7 +310,7 @@ namespace PersonalWorkAPI.DAL
                new MySqlParameter("@article_title","%"+mode.article_title.Value+"%"),
                new MySqlParameter("@sort_id",mode.sort_id.Value),
                new MySqlParameter("@article_status",mode.article_status.Value)
-             }; 
+             };
 
             strSql.Append(" order by  article_created desc ");
 
@@ -413,11 +413,12 @@ namespace PersonalWorkAPI.DAL
         /// <summary>
         /// 获得数据列表
         /// </summary>
-        public DataTable GetModelList(dynamic mode ,ref int totalPage)
+        public DataTable GetModelList(dynamic mode, ref int totalPage)
         {
             DataSet ds = GetList(mode);
-
-            DataTable rslt = Pagination.getOnePageTable(ds.Tables[0], int.Parse(mode.pageIndex.Value), int.Parse(mode.pageSize.Value), ref totalPage);
+            int pageIndex = Convert.ToInt16(mode.pageIndex.Value );
+            int pageSize = Convert.ToInt16(mode.pageSize.Value);
+            DataTable rslt = Pagination.getOnePageTable(ds.Tables[0], pageIndex, pageSize, ref totalPage);
             return rslt;
         }
 
