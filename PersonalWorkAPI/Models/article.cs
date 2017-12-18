@@ -11,19 +11,46 @@ namespace PersonalWorkAPI.Model
 		public article()
 		{}
 		#region Model
-		private int _article_id;
-		private string _article_title;
-		private string _article_created;
-		private string _article_creator;
-		private string _article_changed;
-		private string _article_changer;
-		private int? _article_click=0;
+		private int _id;
+		private string _title;
+		private string _created;
+		private string _creator;
+		private string _changed;
+		private string _changer;
+		private int? _click=0;
 		private int? _sort_id=0;
-		private string _article_content;
-		private int? _article_up=0;
-		private int? _article_support=0;
-		private int? _article_status=0;
+		private string _content;
+		private int? _up=0;
+		private int? _support=0;
+		private int? _status=0;
         private string _sort_name;
+        private string _summary;
+        private string _carousel_url;
+        private string _thumbnail_url;
+        private string _description;
+
+
+        public string summary
+        {
+            set { _summary = value; }
+            get { return _summary; }
+        }
+        public string carousel_url
+        {
+            set { _carousel_url = value; }
+            get { return _carousel_url; }
+        }
+        public string thumbnail_url
+        {
+            set { _thumbnail_url = value; }
+            get { return _thumbnail_url; }
+        }
+        public string description
+        {
+            set { _description = value; }
+            get { return _description; }
+        }
+
 
         public string sort_name
         {
@@ -34,58 +61,58 @@ namespace PersonalWorkAPI.Model
 		/// <summary>
 		/// auto_increment
 		/// </summary>
-		public int article_id
+		public int id
 		{
-			set{ _article_id=value;}
-			get{return _article_id;}
+			set{ _id=value;}
+			get{return _id;}
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public string article_title
+		public string title
 		{
-			set{ _article_title=value;}
-			get{return _article_title;}
+			set{ _title=value;}
+			get{return _title;}
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public string article_created
+		public string created
 		{
-			set{ _article_created=value;}
-			get{return _article_created;}
+			set{ _created=value;}
+			get{return _created;}
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public string article_creator
+		public string creator
 		{
-			set{ _article_creator=value;}
-			get{return _article_creator;}
+			set{ _creator=value;}
+			get{return _creator;}
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public string article_changed
+		public string changed
 		{
-			set{ _article_changed=value;}
-			get{return _article_changed;}
+			set{ _changed=value;}
+			get{return _changed;}
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public string article_changer
+		public string changer
 		{
-			set{ _article_changer=value;}
-			get{return _article_changer;}
+			set{ _changer=value;}
+			get{return _changer;}
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public int? article_click
+		public int? click
 		{
-			set{ _article_click=value;}
-			get{return _article_click;}
+			set{ _click=value;}
+			get{return _click;}
 		}
 		/// <summary>
 		/// 
@@ -98,34 +125,34 @@ namespace PersonalWorkAPI.Model
 		/// <summary>
 		/// 
 		/// </summary>
-		public string article_content
+		public string content
 		{
-			set{ _article_content=value;}
-			get{return _article_content;}
+			set{ _content=value;}
+			get{return _content;}
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public int? article_up
+		public int? up
 		{
-			set{ _article_up=value;}
-			get{return _article_up;}
+			set{ _up=value;}
+			get{return _up;}
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public int? article_support
+		public int? support
 		{
-			set{ _article_support=value;}
-			get{return _article_support;}
+			set{ _support=value;}
+			get{return _support;}
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public int? article_status
+		public int? status
 		{
-			set{ _article_status=value;}
-			get{return _article_status;}
+			set{ _status=value;}
+			get{return _status;}
 		}
 		#endregion Model
 

@@ -73,14 +73,14 @@ namespace PersonalWorkAPI.Controllers
         /// 删除一条数据
         /// </summary>
         [HttpGet]
-        public RetResult Delete(int article_id)
+        public RetResult Delete(int id)
         {
             var retResult = new RetResult();
             retResult.SetSuccess("删除文章详细信息成功！");
 
             try
             {
-                var res = dal.Delete(article_id);
+                var res = dal.Delete(id);
                 retResult.RetData = res;
             }
             catch (Exception ex)
@@ -97,14 +97,14 @@ namespace PersonalWorkAPI.Controllers
         /// 批量删除数据
         /// </summary>
         [HttpGet]
-        public RetResult DeleteList(string article_id)
+        public RetResult DeleteList(string id)
         {
             var retResult = new RetResult();
             retResult.SetSuccess("删除文章详细信息成功！");
 
             try
             {
-                var res = dal.DeleteList(article_id);
+                var res = dal.DeleteList(id);
                 retResult.RetData = res;
             }
             catch (Exception ex)
@@ -120,14 +120,14 @@ namespace PersonalWorkAPI.Controllers
         /// 获取明细
         /// </summary> 
         [HttpGet]
-        public RetResult GetModel(int article_id)
+        public RetResult GetModel(int id)
         {
             var retResult = new RetResult();
             retResult.SetSuccess("查询文章详细信息成功！");
 
             try
             {
-                var res = dal.GetModel(article_id); ;
+                var res = dal.GetModel(id); ;
 
                 if (res != null && res.Rows.Count != 0)
                 {
@@ -159,7 +159,7 @@ namespace PersonalWorkAPI.Controllers
             {
                 var res = dal.GetModelList(mode, ref pageCount); 
 
-                if (res != null && res.Rows.Count != 0)
+                if (res != null )
                 {
                     retResult.RetData = res;
                      retResult.pageCount = pageCount;
