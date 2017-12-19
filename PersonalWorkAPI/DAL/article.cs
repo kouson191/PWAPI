@@ -49,7 +49,7 @@ namespace PersonalWorkAPI.DAL
             strSql.Append("insert into article(");
             strSql.Append("title,created,creator,sort_id,content,up,support,status,summary,carousel_url,thumbnail_url,description)");
             strSql.Append(" values (");
-            strSql.Append("@title,unix_timestamp(now()),@creator,@sort_id,@content,@up,@support,@status)");
+            strSql.Append("@title,unix_timestamp(now()),@creator,@sort_id,@content,@up,@support,@status,@summary,@carousel_url,@thumbnail_url,@description)");
             MySqlParameter[] parameters = {
 					new MySqlParameter("@title", MySqlDbType.VarChar,128), 
 					new MySqlParameter("@creator", MySqlDbType.VarChar,32), 
