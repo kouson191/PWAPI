@@ -45,6 +45,9 @@ namespace PersonalWorkAPI.DAL
 
         public bool Add(dynamic model)
         {
+
+            model.content = Uri.UnescapeDataString(model.content);
+
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into article(");
             strSql.Append("title,created,creator,sort_id,content,up,support,status,summary,carousel_url,thumbnail_url,description)");
@@ -90,7 +93,9 @@ namespace PersonalWorkAPI.DAL
         /// 更新一条数据
         /// </summary>
         public bool Update(dynamic model)
-        { 
+        {
+
+            model.content = Uri.UnescapeDataString(model.content);
 
             StringBuilder strSql = new StringBuilder();
             strSql.Append("update article set ");
@@ -300,7 +305,7 @@ namespace PersonalWorkAPI.DAL
                     model.sort_name = row["sort_name"].ToString();
                 }
 
-                
+
                 if (row["summary"] != null && row["summary"].ToString() != "")
                 {
                     model.summary = row["summary"].ToString();
@@ -317,7 +322,7 @@ namespace PersonalWorkAPI.DAL
                 {
                     model.description = row["description"].ToString();
                 }
-                 
+
             }
             return model;
         }
@@ -325,16 +330,17 @@ namespace PersonalWorkAPI.DAL
         /// <summary>
         /// 获得数据列表
         /// </summary>
-        public DataSet GetList(dynamic mode)
+        public DataTable GetList(dynamic mode,   ref int rowCount)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,title,from_unixtime(created, '%Y-%m-%d %H:%i:%S') created,creator,from_unixtime(changed, '%Y-%m-%d %H:%i:%S') changed,changer,click,article.sort_id,content,up,support,status,article_sort.sort_name,summary,carousel_url,thumbnail_url,description ");
+            StringBuilder countSql = new StringBuilder();
+            StringBuilder selectSql = new StringBuilder();
+            selectSql.Append("select id,title,from_unixtime(created, '%Y-%m-%d %H:%i:%S') created,creator,from_unixtime(changed, '%Y-%m-%d %H:%i:%S') changed,changer,click,article.sort_id,content,up,support,status,article_sort.sort_name,summary,carousel_url,thumbnail_url,description ");
+            countSql.Append("select count(1) ");
+
             strSql.Append(" FROM article  inner join article_sort on article.sort_id = article_sort.sort_id where 1 = 1  ");
 
-            if (!string.IsNullOrEmpty(mode.title.Value))
-            {
-                strSql.Append(" and  title like @title ");
-            }
+             
             if (!string.IsNullOrEmpty(mode.sort_id.Value))
             {
                 strSql.Append("  and  article.sort_id = @sort_id ");
@@ -342,19 +348,52 @@ namespace PersonalWorkAPI.DAL
 
             if (!string.IsNullOrEmpty(mode.status.Value))
             {
-                strSql.Append("  and  status = @status  ");
+                strSql.Append("  and  ( status = @status or @status = -1  ) ");
             }
 
+            if (!string.IsNullOrEmpty(mode.up.Value))
+            {
+                strSql.Append("  and  article.up = @up ");
+            }
+            
+            if (!string.IsNullOrEmpty(mode.support.Value))
+            {
+                strSql.Append("  and  article.support = @support ");
+            }
 
-            MySqlParameter[] parameter = {
-               new MySqlParameter("@title","%"+mode.title.Value+"%"),
+            if (!string.IsNullOrEmpty(mode.search.Value))
+            {
+                strSql.Append("  and  ( article.title like @search or summary like @search or  content like @search  ) ");
+            } 
+
+
+
+            MySqlParameter[] parameter = { 
                new MySqlParameter("@sort_id",mode.sort_id.Value),
-               new MySqlParameter("@status",mode.status.Value)
+               new MySqlParameter("@status",mode.status.Value),
+               new MySqlParameter("@up",mode.up.Value),
+               new MySqlParameter("@support",mode.support.Value),
+               new MySqlParameter("@search","%"+mode.search.Value+"%")
              };
 
-            strSql.Append(" order by  created desc ");
+            rowCount = Convert.ToInt16(DbHelperMySQL.Query(countSql.ToString() + strSql.ToString(), parameter).Tables[0].Rows[0][0].ToString());
+            int pageIndex = Convert.ToInt16(mode.pageIndex.Value);
+            int pageSize = Convert.ToInt16(mode.pageSize.Value);  
 
-            return DbHelperMySQL.Query(strSql.ToString(), parameter);
+            strSql.Append(" order by  created desc,id desc ");
+            strSql.Append(" limit @index,@PageSize;");
+            MySqlParameter[] parameter2 = {  
+                new MySqlParameter("@sort_id",mode.sort_id.Value),
+                new MySqlParameter("@status",mode.status.Value),
+               new MySqlParameter("@up",mode.up.Value),
+               new MySqlParameter("@support",mode.support.Value),
+               new MySqlParameter("@search","%"+mode.search.Value+"%"),
+                new MySqlParameter("@index",(pageIndex - 1) * pageSize ),
+                new MySqlParameter("@PageSize",pageSize), 
+                 
+            }; 
+
+            return DbHelperMySQL.Query(selectSql.ToString() + strSql.ToString(), parameter2).Tables[0];
         }
 
 
@@ -453,12 +492,12 @@ namespace PersonalWorkAPI.DAL
         /// <summary>
         /// 获得数据列表
         /// </summary>
-        public DataTable GetModelList(dynamic mode, ref int totalPage)
+        public DataTable GetModelList(dynamic mode, ref int rowCount)
         {
-            DataSet ds = GetList(mode);
-            int pageIndex = Convert.ToInt16(mode.pageIndex.Value );
-            int pageSize = Convert.ToInt16(mode.pageSize.Value);
-            DataTable rslt = Pagination.getOnePageTable(ds.Tables[0], pageIndex, pageSize, ref totalPage);
+            DataTable rslt = GetList(mode, ref rowCount);
+            //int pageIndex = Convert.ToInt16(mode.pageIndex.Value );
+            //int pageSize = Convert.ToInt16(mode.pageSize.Value);
+            //DataTable rslt = Pagination.getOnePageTable(ds.Tables[0], pageIndex, pageSize, ref totalPage);
             return rslt;
         }
 

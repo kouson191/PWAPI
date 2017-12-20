@@ -28,6 +28,12 @@ namespace PersonalWorkAPI.Common
 
 
         /// <summary>
+        /// 总行数
+        /// </summary>
+        public int rowCount { get; set; }
+        
+
+        /// <summary>
         /// 异常
         /// </summary>
         public string Exception { get; set; }

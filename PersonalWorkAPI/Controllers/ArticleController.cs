@@ -154,15 +154,21 @@ namespace PersonalWorkAPI.Controllers
             //pageIndex
             var retResult = new RetResult();
             retResult.SetSuccess("查询文章详细信息成功！");
-            var pageCount = 0;
+            int pageCount = 0;
+            int rowCount = 0;
+
+
             try
             {
-                var res = dal.GetModelList(mode, ref pageCount); 
+                var res = dal.GetModelList(mode, ref rowCount); 
 
                 if (res != null )
                 {
                     retResult.RetData = res;
-                     retResult.pageCount = pageCount;
+                    pageCount = Convert.ToInt16(Math.Ceiling(Convert.ToDouble(rowCount) / Convert.ToInt16(mode.pageSize.Value)));
+                    retResult.pageCount = pageCount;
+                    retResult.rowCount = rowCount;
+
                 }
             }
             catch (Exception ex)
