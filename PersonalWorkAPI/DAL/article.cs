@@ -45,9 +45,6 @@ namespace PersonalWorkAPI.DAL
 
         public bool Add(dynamic model)
         {
-
-            model.content = Uri.UnescapeDataString(model.content);
-
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into article(");
             strSql.Append("title,created,creator,sort_id,content,up,support,status,summary,carousel_url,thumbnail_url,description)");
@@ -67,7 +64,7 @@ namespace PersonalWorkAPI.DAL
 					new MySqlParameter("@description", MySqlDbType.VarChar,255)  
                                           };
             parameters[0].Value = model.title;
-            parameters[1].Value = model.creator;
+            parameters[1].Value = "Admin";
             parameters[2].Value = model.sort_id;
             parameters[3].Value = model.content;
             parameters[4].Value = model.up;
@@ -94,8 +91,6 @@ namespace PersonalWorkAPI.DAL
         /// </summary>
         public bool Update(dynamic model)
         {
-
-            model.content = Uri.UnescapeDataString(model.content);
 
             StringBuilder strSql = new StringBuilder();
             strSql.Append("update article set ");
@@ -126,7 +121,7 @@ namespace PersonalWorkAPI.DAL
 					new MySqlParameter("@thumbnail_url", MySqlDbType.VarChar,255),
 					new MySqlParameter("@description", MySqlDbType.VarChar,255)};
             parameters[0].Value = model.title;
-            parameters[1].Value = model.changer;
+            parameters[1].Value = "Admin";
             parameters[2].Value = model.sort_id;
             parameters[3].Value = model.content;
             parameters[4].Value = model.up;
@@ -195,7 +190,7 @@ namespace PersonalWorkAPI.DAL
         public DataTable GetModel(int id)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,title,created,creator,changed,changer,click,sort_id,content,up,support,status,summary,carousel_url,thumbnail_url,description from article ");
+            strSql.Append("select id,title,FROM_UNIXTIME(created) created,creator,FROM_UNIXTIME(changed) changed,changer,click,sort_id,content,up,support,status,summary,carousel_url,thumbnail_url,description from article ");
             strSql.Append(" where id=@id");
             MySqlParameter[] parameters = {
 					new MySqlParameter("@id", MySqlDbType.Int32)

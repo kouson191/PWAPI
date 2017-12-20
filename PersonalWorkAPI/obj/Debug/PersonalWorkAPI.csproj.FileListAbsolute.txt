@@ -278,3 +278,4 @@ E:\WebProject\PWAPI\PersonalWorkAPI\bin\zh-Hans\System.Spatial.resources.dll
 E:\WebProject\PWAPI\PersonalWorkAPI\bin\zh-Hant\System.Spatial.resources.dll
 E:\WebProject\PWAPI\PersonalWorkAPI\obj\Debug\PersonalWorkAPI.dll
 E:\WebProject\PWAPI\PersonalWorkAPI\obj\Debug\PersonalWorkAPI.pdb
+E:\WebProject\PWAPI\PersonalWorkAPI\obj\Debug\PersonalWorkAPI.csprojResolveAssemblyReference.cache
