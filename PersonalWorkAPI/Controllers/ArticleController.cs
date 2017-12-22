@@ -142,7 +142,37 @@ namespace PersonalWorkAPI.Controllers
 
             return retResult;
         }
-         
+
+        /// <summary>
+        /// 查询轮播信息
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public RetResult GetCarousel(int num )
+        {
+
+            var retResult = new RetResult();
+            retResult.SetSuccess("查询轮播信息成功！");
+            try
+            {
+                var res = dal.GetCarousel(num);
+
+                if (res != null)
+                {
+                    retResult.RetData = res; 
+
+                }
+            }
+            catch (Exception ex)
+            {
+                retResult.SetFail("查询轮播信息失败！");
+                retResult.Exception = ex.Message;
+            }
+
+            return retResult; 
+        
+        }
+
 
         /// <summary>
         /// 列表

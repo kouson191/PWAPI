@@ -322,6 +322,20 @@ namespace PersonalWorkAPI.DAL
             return model;
         }
 
+
+        public DataTable GetCarousel(int num)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"select id,title,from_unixtime(created, '%Y-%m-%d %H:%i:%S') created,creator,from_unixtime(changed, '%Y-%m-%d %H:%i:%S') changed,
+                            changer,click,article.sort_id,content,up,support,status, summary,carousel_url,thumbnail_url,description 
+                            from article where carousel_url <> '' order by  created desc  limit 0," + num.ToString() + @" ");
+
+            return DbHelperMySQL.Query(  strSql.ToString()).Tables[0];
+
+        }
+
+
         /// <summary>
         /// 获得数据列表
         /// </summary>
