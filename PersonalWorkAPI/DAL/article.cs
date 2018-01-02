@@ -327,8 +327,7 @@ namespace PersonalWorkAPI.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"select id,title,from_unixtime(created, '%Y-%m-%d %H:%i:%S') created,creator,from_unixtime(changed, '%Y-%m-%d %H:%i:%S') changed,
-                            changer,click,article.sort_id,content,up,support,status, summary,carousel_url,thumbnail_url,description 
+            strSql.Append(@"select id,title,carousel_url
                             from article where carousel_url <> '' order by  created desc  limit 0," + num.ToString() + @" ");
 
             return DbHelperMySQL.Query(  strSql.ToString()).Tables[0];
@@ -344,33 +343,47 @@ namespace PersonalWorkAPI.DAL
             StringBuilder strSql = new StringBuilder();
             StringBuilder countSql = new StringBuilder();
             StringBuilder selectSql = new StringBuilder();
-            selectSql.Append("select id,title,from_unixtime(created, '%Y-%m-%d %H:%i:%S') created,creator,from_unixtime(changed, '%Y-%m-%d %H:%i:%S') changed,changer,click,article.sort_id,content,up,support,status,article_sort.sort_name,summary,carousel_url,thumbnail_url,description ");
+
+            int getType = Int16.Parse(mode.getType.Value.ToString());
+            ///
+            switch(getType) 
+            {   
+                case -1: //所有详情
+                    selectSql.Append("select id,title,from_unixtime(created, '%Y-%m-%d %H:%i:%S') created,article_sort.sort_name,summary,   creator,from_unixtime(changed, '%Y-%m-%d %H:%i:%S') changed,changer,click,article.sort_id,content,up,support,status,carousel_url,thumbnail_url,description ");
+                     break;   
+                case 1: //左列表
+                case 2: //右侧列表
+                    selectSql.Append("select id,title,thumbnail_url,from_unixtime(created, '%Y-%m-%d') created,article_sort.sort_name,summary  ");
+                    break;   
+            }   
+            
+            
             countSql.Append("select count(1) ");
 
             strSql.Append(" FROM article  inner join article_sort on article.sort_id = article_sort.sort_id where 1 = 1  ");
 
              
-            if (!string.IsNullOrEmpty(mode.sort_id.Value))
+            if (!string.IsNullOrEmpty(mode.sort_id.Value.ToString()))
             {
-                strSql.Append("  and  article.sort_id = @sort_id ");
+                strSql.Append("  and  ( article.sort_id = @sort_id or @sort_id = 0 ) ");
             }
 
-            if (!string.IsNullOrEmpty(mode.status.Value))
+            if (!string.IsNullOrEmpty(mode.status.Value.ToString()))
             {
                 strSql.Append("  and  ( status = @status or @status = -1  ) ");
             }
 
-            if (!string.IsNullOrEmpty(mode.up.Value))
+            if (!string.IsNullOrEmpty(mode.up.Value.ToString()))
             {
                 strSql.Append("  and  article.up = @up ");
             }
-            
-            if (!string.IsNullOrEmpty(mode.support.Value))
+
+            if (!string.IsNullOrEmpty(mode.support.Value.ToString()))
             {
                 strSql.Append("  and  article.support = @support ");
             }
 
-            if (!string.IsNullOrEmpty(mode.search.Value))
+            if (!string.IsNullOrEmpty(mode.search.Value.ToString()))
             {
                 strSql.Append("  and  ( article.title like @search or summary like @search or  content like @search  ) ");
             } 
